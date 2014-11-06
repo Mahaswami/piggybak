@@ -41,8 +41,8 @@ module Piggybak
       self.recorded_changes ||= []
 
       self.billing_address ||= Piggybak::Address.new
-      self.shipping_address ||= Piggybak::Address.new
-      self.shipping_address.is_shipping = true
+      #self.shipping_address ||= Piggybak::Address.new
+      #self.shipping_address.is_shipping = true
 
       self.ip_address ||= 'admin'
       self.user_agent ||= 'admin'
@@ -67,7 +67,7 @@ module Piggybak
 
     def initialize_user(user)
       if user
-        self.user = user
+        self.user_id = user.id
         self.email = user.email 
       end
     end
@@ -145,7 +145,7 @@ module Piggybak
 
     def create_payment_shipment
       shipment_line_item = self.line_items.detect { |li| li.line_item_type == "shipment" }
-
+=begin
       if shipment_line_item.nil?
         new_shipment_line_item = Piggybak::LineItem.new({ :line_item_type => "shipment" })
         new_shipment_line_item.build_shipment
@@ -157,6 +157,7 @@ module Piggybak
         shipment_line_item.build_shipment
         shipment_line_item.shipment.shipping_method_id = previous_method
       end
+=end
 
       if !self.line_items.detect { |li| li.line_item_type == "payment" }
         payment_line_item = Piggybak::LineItem.new({ :line_item_type => "payment" })
