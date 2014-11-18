@@ -10,7 +10,7 @@ module Piggybak
         begin
           ActiveRecord::Base.transaction do
             @order = Piggybak::Order.new(orders_params)
-            @order.create_payment_shipment
+            @order.create_payment_shipment(@cart)
 
             if Piggybak.config.logging
               clean_params = params[:order].clone
@@ -61,7 +61,14 @@ module Piggybak
         end
       else
         @order = Piggybak::Order.new
-        @order.create_payment_shipment
+        @order.shipping_address ||= Piggybak::Address.new
+        if @order.is_order_contain_shippable_item?(@cart)
+           @order.shipping_address.is_shipping = true
+        else
+           @order.shipping_address.is_shipping = false
+        end
+
+        @order.create_payment_shipment(@cart)
         @order.initialize_user(current_user)
       end
     end

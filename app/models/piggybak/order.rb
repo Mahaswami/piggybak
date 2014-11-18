@@ -41,8 +41,6 @@ module Piggybak
       self.recorded_changes ||= []
 
       self.billing_address ||= Piggybak::Address.new
-      #self.shipping_address ||= Piggybak::Address.new
-      #self.shipping_address.is_shipping = true
 
       self.ip_address ||= 'admin'
       self.user_agent ||= 'admin'
@@ -52,6 +50,16 @@ module Piggybak
       self.total ||= 0
       self.total_due ||= 0
       self.disable_order_notes = false
+    end
+
+    def is_order_contain_shippable_item?(cart)
+		shippable_item_present = false
+		cart.sellables.collect do |sellable|
+		     if(sellable[:sellable].item.item_type == "CgBookstore::BookstoreCategoryVersion" && sellable[:sellable].item.option_values.first.name != "PDF")
+        	     shippable_item_present = true
+        	    break
+        	end
+        end	
     end
 
     def number_payments
@@ -143,21 +151,21 @@ module Piggybak
       end
     end
 
-    def create_payment_shipment
-      shipment_line_item = self.line_items.detect { |li| li.line_item_type == "shipment" }
-=begin
-      if shipment_line_item.nil?
-        new_shipment_line_item = Piggybak::LineItem.new({ :line_item_type => "shipment" })
-        new_shipment_line_item.build_shipment
-        self.line_items << new_shipment_line_item
-      elsif shipment_line_item.shipment.nil?
-        shipment_line_item.build_shipment
-      else
-        previous_method = shipment_line_item.shipment.shipping_method_id
-        shipment_line_item.build_shipment
-        shipment_line_item.shipment.shipping_method_id = previous_method
+    def create_payment_shipment(cart)
+      if is_order_contain_shippable_item?(cart)
+      	shipment_line_item = self.line_items.detect { |li| li.line_item_type == "shipment" }
+      	if shipment_line_item.nil?
+       	 new_shipment_line_item = Piggybak::LineItem.new({ :line_item_type => "shipment" })
+       	 new_shipment_line_item.build_shipment
+       	 self.line_items << new_shipment_line_item
+     	elsif shipment_line_item.shipment.nil?
+       	 shipment_line_item.build_shipment
+        else
+       	 previous_method = shipment_line_item.shipment.shipping_method_id
+       	 shipment_line_item.build_shipment
+       	 shipment_line_item.shipment.shipping_method_id = previous_method
+        end
       end
-=end
 
       if !self.line_items.detect { |li| li.line_item_type == "payment" }
         payment_line_item = Piggybak::LineItem.new({ :line_item_type => "payment" })
