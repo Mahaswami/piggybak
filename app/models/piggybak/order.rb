@@ -52,14 +52,13 @@ module Piggybak
       self.disable_order_notes = false
     end
 
-    def is_order_contain_shippable_item?(cart)
-		shippable_item_present = false
-		cart.sellables.collect do |sellable|
-		     if(sellable[:sellable].item.item_type == "CgBookstore::BookstoreCategoryVersion" && sellable[:sellable].item.option_values.first.name != "PDF")
-        	     shippable_item_present = true
-        	    break
-        	end
+    def is_order_contain_shippable_item?(cart)		
+	cart.sellables.collect do |sellable|
+	     if(sellable[:sellable].item.item_type == "CgBookstore::BookstoreCategoryVersion" && sellable[:sellable].item.option_values.first.name != "PDF")
+               return true
+             end
         end	
+      return false 
     end
 
     def number_payments
