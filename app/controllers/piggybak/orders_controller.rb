@@ -52,6 +52,7 @@ module Piggybak
             end
           end
         rescue Exception => e
+          ExceptionNotifier.notify_exception(e)
           if Piggybak.config.logging
             logger.warn "#{request.remote_ip}:#{Time.now.strftime("%Y-%m-%d %H:%M")} Order exception: #{e.inspect}"
           end
