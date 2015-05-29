@@ -17,7 +17,6 @@ module Piggybak
 
     validates :status, presence: true
     validates :email, presence: true
-    validates :phone, presence: true
     validates :total, presence: true
     validates :total_due, presence: true
     validates :created_at, presence: true
