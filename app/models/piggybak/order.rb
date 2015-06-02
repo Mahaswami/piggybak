@@ -52,8 +52,9 @@ module Piggybak
     end
 
     def is_order_contain_shippable_item?(cart)		
-	cart.sellables.collect do |sellable|
-	     if(sellable[:sellable].item.item_type == "CgDocument::Version" && ['PDF', 'Scholar Web Work'].include?(sellable[:sellable].item.option_values.first.name) == false
+	   cart.sellables.collect do |sellable|
+	     if(sellable[:sellable].item.item_type == "CgDocument::Version" &&
+           ['PDF', 'Scholar Web Work'].include?(sellable[:sellable].item.option_values.first.name) == false)
                return true
              end
         end	
