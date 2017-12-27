@@ -27,7 +27,7 @@ var piggybak_states = {
 		var country_id = country_field.val();
 		var new_field;
 
-		if(geodata.countries["country_" + country_id].length > 0) {
+		if( geodata.countries["country_" + country_id] && geodata.countries["country_" + country_id].length > 0) {
 			new_field = $('<select>');
 			new_field.append($('<option>').val('').html('Select State'));
 			$.each(geodata.countries["country_" + country_id], function(i, j) {
