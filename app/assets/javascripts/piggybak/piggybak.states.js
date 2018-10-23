@@ -37,17 +37,12 @@ var piggybak_states = {
 			new_field = $('<input>');
 		}
 		var old_field = $('#order_' + type + '_address_attributes_state_id');
-		console.log('#order_' + type + '_address_attributes_state_id');
-		console.log(new_field);
-		console.log(new_field.attr('id'));
-		console.log(new_field.attr('name'));
-		console.log(old_field);
-		console.log(old_field.attr('id'));
-		console.log(old_field.attr('name'));
-		new_field.attr('name', old_field.attr('name')).attr('id', old_field.attr('id'));
-		console.log(new_field);
-		console.log(new_field.attr('id'));
-		console.log(new_field.attr('name'));
+		if (typeof(old_field.attr('name')) != "undefined") {
+		    new_field.attr('name', old_field.attr('name'));
+		}
+        if (typeof(old_field.attr('id')) != "undefined") {
+		    new_field.attr('id', old_field.attr('id'));
+		}
 		if(old_field.prop('tagName') == new_field.prop('tagName')) {
 			new_field.val(old_field.val());
 		}
