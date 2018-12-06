@@ -141,6 +141,7 @@ var piggybak = {
 		    var _walletTotal = parseFloat($("#offset_amnt").attr("data"));
 		    if (_walletTotal > order_total) {
 		        $("div#payment").hide();
+		        $("#payment .cvv").val('');
 		        $("td#total_amnt").html("-$" + order_total.toFixed(2))
 		        $('#order_total').html("$" + 0 + ".00")
 		    } else {
