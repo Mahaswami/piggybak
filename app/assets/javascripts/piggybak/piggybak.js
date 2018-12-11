@@ -136,7 +136,22 @@ var piggybak = {
 		$.each($('.extra_totals'), function(i, el) {
 			order_total += parseFloat($(el).html().replace(/\$/, ''));
 		});
-		$('#order_total').html('$' + order_total.toFixed(2));
+		// order total check if offset amount is present
+		if ($("#offset_amnt").length > 0){
+		    var _walletTotal = parseFloat($("#offset_amnt").attr("data"));
+		    if (_walletTotal > order_total) {
+		        $("div#payment").hide();
+		        $("#payment .cvv").val('');
+		        $("td#total_amnt").html("-$" + order_total.toFixed(2))
+		        $('#order_total').html("$" + 0 + ".00")
+		    } else {
+		        $("div#payment").show();
+		        $("td#total_amnt").html("-$" + _walletTotal.toFixed(2));
+		        $("#order_total").html("$" + (order_total - _walletTotal).toFixed(2))
+		    }
+		}else{
+		    $('#order_total').html('$' + order_total.toFixed(2));
+		}
 		return order_total;
 	},
 	retrieve_shipping_data: function() {
