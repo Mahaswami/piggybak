@@ -139,7 +139,7 @@ var piggybak = {
 		// order total check if offset amount is present
 		if ($("#offset_amnt").length > 0){
 		    var _walletTotal = parseFloat($("#offset_amnt").attr("data"));
-		    if (_walletTotal > order_total) {
+		    if (_walletTotal >= order_total) {
 		        $("div#payment").hide();
 		        $("#payment .cvv").val('');
 		        $("td#total_amnt").html("-$" + order_total.toFixed(2))
