@@ -1,6 +1,7 @@
 module Piggybak
   class OrdersController < ApplicationController
     def submit
+      puts "test logssssssssssss"
       response.headers['Cache-Control'] = 'no-cache'
       @cart = Piggybak::Cart.new(request.cookies["cart"])
 

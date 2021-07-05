@@ -34,6 +34,7 @@ module Piggybak
     end
 
     def process(order)
+      puts "process method calling 12345"
       return true if !self.new_record?
 
       ActiveMerchant::Billing::Base.mode = Piggybak.config.activemerchant_mode
@@ -41,7 +42,7 @@ module Piggybak
       payment_gateway = self.payment_method.klass.constantize
       gateway = payment_gateway::KLASS.new(self.payment_method.key_values)
       p_credit_card = ActiveMerchant::Billing::CreditCard.new(self.credit_card)
-      gateway_response = gateway.authorize(order.total_due*100, p_credit_card, :address => order.avs_address)
+      gateway_response = gateway.authorize(order.total_due*100, p_credit_card, :address => order.avs_address, :email => order.email, :order_id => order.id, :description => "Scholar Order: '#{order.id}'")
       if gateway_response.success?
         self.attributes = { :transaction_id => payment_gateway.transaction_id(gateway_response),
                             :masked_number => self.number.mask_cc_number }
